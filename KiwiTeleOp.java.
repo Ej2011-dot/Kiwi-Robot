@@ -1,0 +1,42 @@
+package org.firstinspires.ftc.teamcode.opmodes;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.robot.Robot;
+
+@TeleOp(name = "Kiwi TeleOp")
+public class KiwiTeleOp extends LinearOpMode {
+
+    private Robot robot;
+
+    @Override
+    public void runOpMode() {
+
+        robot = new Robot(hardwareMap);
+
+        telemetry.addLine("Robot Initialized");
+        telemetry.update();
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+
+            double x = gamepad1.left_stick_x;
+
+            // FTC joysticks are inverted
+            double y = -gamepad1.left_stick_y;
+
+            double turn = gamepad1.right_stick_x;
+
+            robot.drive(x, y, turn);
+
+            telemetry.addData("X", x);
+            telemetry.addData("Y", y);
+            telemetry.addData("Turn", turn);
+            telemetry.update();
+        }
+
+        robot.stop();
+    }
+}

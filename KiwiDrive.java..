@@ -1,0 +1,56 @@
+package org.firstinspires.ftc.teamcode.mechanisms;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+public class KiwiDrive {
+
+    private DcMotor motor1;
+    private DcMotor motor2;
+    private DcMotor motor3;
+
+    public KiwiDrive(HardwareMap hardwareMap) {
+
+        motor1 = hardwareMap.get(DcMotor.class, "motor1");
+        motor2 = hardwareMap.get(DcMotor.class, "motor2");
+        motor3 = hardwareMap.get(DcMotor.class, "motor3");
+
+        motor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motor3.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Reverse motors if needed
+        // motor1.setDirection(DcMotor.Direction.REVERSE);
+        // motor2.setDirection(DcMotor.Direction.REVERSE);
+        // motor3.setDirection(DcMotor.Direction.REVERSE);
+    }
+
+    public void drive(double x, double y, double turn) {
+
+        double p1 = (-0.5 * x) + (0.866 * y) + turn;
+        double p2 = (-0.5 * x) - (0.866 * y) + turn;
+        double p3 = (x) + turn;
+
+        // Normalize powers
+        double max = Math.max(
+                Math.max(Math.abs(p1), Math.abs(p2)),
+                Math.abs(p3)
+        );
+
+        if (max > 1.0) {
+            p1 /= max;
+            p2 /= max;
+            p3 /= max;
+        }
+
+        motor1.setPower(p1);
+        motor2.setPower(p2);
+        motor3.setPower(p3);
+    }
+
+    public void stop() {
+        motor1.setPower(0);
+        motor2.setPower(0);
+        motor3.setPower(0);
+    }
+}
